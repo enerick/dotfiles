@@ -1,22 +1,13 @@
 ;;;;;;;;Code
 (setq user-full-name "enerick")
 
-(setq load-path (cons "~/.emacs.d/elisp" load-path))
+(setq load-path (cons "~/.emacs.d/elisp" (cons "~/.emacs.d/auto-install" load-path)))
 
 ;;;;;;;;Settings
-; 言語を日本語にする
 (set-language-environment 'Japanese)
-
-; 極力 UTF-8 とする
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8-unix)
-
-; C-h を backspace にする
-;(global-set-key "\C-h" 'delete-backward-char)
-
-; 現在行をハイライトする
-;(global-hl-line-mode t)
 
 ; 行番号の表示
 (push "~/.emacs.d/elisp" load-path)
@@ -34,7 +25,6 @@
 (setq mac-pass-control-to-system t) ; コントロールキーを Mac ではなく Emacs に渡す
 (setq mac-pass-option-to-system t)
 
-(define-key global-map [(super a)] 'anything)
 
 ;カーソルキーをhjklに
 (global-set-key "\C-h" 'backward-char)
@@ -48,7 +38,12 @@
 (require 'auto-install)
 (setq auto-install-directory "~/.emacs.d/auto-install/")
 (auto-install-update-emacswiki-package-name t)
+
 (auto-install-compatibility-setup)             ; 互換性確保
+
+;;Anything
+(require 'anything-startup)
+(define-key global-map [(super a)] 'anything)
 
 ;;;;;;;;;Scheme関連
 (setq scheme-program-name "gosh")
