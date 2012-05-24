@@ -1,4 +1,3 @@
-" Last Change: 2011/09/27 ".
 set nocompatible
 filetype off
 
