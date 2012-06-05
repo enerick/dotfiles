@@ -1,9 +1,9 @@
-;;;;;Code
+;;;;;;;;Code
 (setq user-full-name "enerick")
 
 (setq load-path (cons "~/.emacs.d/elisp" (cons "~/.emacs.d/auto-install" load-path)))
 
-;;;;;Settings
+;;;;;;;;Settings
 (set-language-environment 'Japanese)
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
@@ -18,16 +18,13 @@
 ; スタートアップメッセージを非表示
 (setq inhibit-startup-screen t)
 
-;;;;;バックアップファイルつくらない
-(setq make-backup-files nil)
-(setq auto-save-default nil)
-
 ;optionをメタキーに
 (setq mac-esc-key-is-meta nil) ; コマンドキーをメタにしない
 (setq mac-option-modifier 'meta)   ; オプションキーをメタに
 (setq mac-command-modifier 'super) ; コマンドキーを Super に
 (setq mac-pass-control-to-system t) ; コントロールキーを Mac ではなく Emacs に渡す
 (setq mac-pass-option-to-system t)
+
 
 ;カーソルキーをhjklに
 (global-set-key "\C-h" 'backward-char)
@@ -37,50 +34,18 @@
 
 (global-set-key "\C-d" 'kill-line)
 
-;;;;;install-elisp
-(require 'install-elisp)
-(setq install-elisp-repository-directory "~/.emacs.d/elisp/")
-
-;;;;;auto-install
+;;auto-install
 (require 'auto-install)
 (setq auto-install-directory "~/.emacs.d/auto-install/")
 (auto-install-update-emacswiki-package-name t)
 
-(auto-install-compatibility-setup);互換性確保
+(auto-install-compatibility-setup)             ; 互換性確保
 
-;;;;;Anything
+;;Anything
 (require 'anything-startup)
 (define-key global-map [(super a)] 'anything)
 
-;;;;;YaTeX
-(push "~/.emacs.d/elisp/yatex" load-path)
-(setq auto-mode-alist (cons (cons "\\.tex$" 'yatex-mode) auto-mode-alist))
-(autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
-
-;;;;;OCaml{{{
-; tuareg mode hook (use caml-mode-hook instead if you use caml-mode)
-(add-hook 'tuareg-mode-hook 
-		  '(lambda ()
-			 (local-set-key "\C-c;" 'ocamlspot-query)
-			 (local-set-key "\C-c\C-t" 'ocamlspot-type)
-			 (local-set-key "\C-c\C-y" 'ocamlspot-type-and-copy)
-			 (local-set-key "\C-c\C-u" 'ocamlspot-use)
-			 (local-set-key "\C-ct" 'caml-types-show-type)))
-;;;;;tuareg-mode
-;;; append-tuareg.el - Tuareg quick installation: Append this file to .emacs.
-
-(setq auto-mode-alist (cons '("\\.ml\\w?" . tuareg-mode) auto-mode-alist))
-(autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
-(autoload 'camldebug "camldebug" "Run the Caml debugger" t)
-
-(if (and (boundp 'window-system) window-system)
-    (when (string-match "XEmacs" emacs-version)
-       	(if (not (and (boundp 'mule-x-win-initted) mule-x-win-initted))
-            (require 'sym-lock))
-       	(require 'font-lock)))
-;;;;;}}}
-
-;;;;;Scheme関連
+;;;;;;;;;Scheme関連
 (setq scheme-program-name "gosh")
 (require 'cmuscheme)
 
@@ -170,3 +135,50 @@
 (put 'with-signal-handlers 'scheme-indent-function 1)
 (put 'with-locking-mutex 'scheme-indent-function 1)
 (put 'guard 'scheme-indent-function 1)
+
+;;;;;OCaml{{{
+(setq auto-mode-alist
+	  (cons '("\\.ml[iylp]?$" . caml-mode) auto-mode-alist))
+(autoload 'caml-mode "caml" "Major mode for editing Caml code." t)
+(autoload 'run-caml "inf-caml" "Run an inferior Caml process." t)
+(if window-system (require 'caml-font))
+(setq inferior-caml-program "/usr/local/bin/ocaml")
+(setq caml-quote-char "'")
+(setq inferior-caml-program "camllight")
+(if window-system (require 'caml-hilit))
+
+; set the path of the ocamlspot binary
+(setq ocamlspot-path "/usr/local/bin/ocamlspot")
+
+; autoload
+(autoload 'ocamlspot-query "ocamlspot" "OCamlSpot")
+
+; tuareg mode hook (use caml-mode-hook instead if you use caml-mode)
+(add-hook 'tuareg-mode-hook 
+		  '(lambda ()
+			 (local-set-key "\C-c;" 'ocamlspot-query)
+			 (local-set-key "\C-c\C-t" 'ocamlspot-type)
+			 (local-set-key "\C-c\C-y" 'ocamlspot-type-and-copy)
+			 (local-set-key "\C-c\C-u" 'ocamlspot-use)
+			 (local-set-key "\C-ct" 'caml-types-show-type)))
+;;;;;tuareg-mode
+;;; append-tuareg.el - Tuareg quick installation: Append this file to .emacs.
+
+(setq auto-mode-alist (cons '("\\.ml\\w?" . tuareg-mode) auto-mode-alist))
+(autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
+(autoload 'camldebug "camldebug" "Run the Caml debugger" t)
+
+(if (and (boundp 'window-system) window-system)
+    (when (string-match "XEmacs" emacs-version)
+       	(if (not (and (boundp 'mule-x-win-initted) mule-x-win-initted))
+            (require 'sym-lock))
+       	(require 'font-lock)))
+;;;;;}}}
+;;;;;;バックアップファイルつくらない
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+
+;; まず、install-elisp のコマンドを使える様にします。
+(require 'install-elisp)
+;; 次に、Elisp ファイルをインストールする場所を指定します。
+(setq install-elisp-repository-directory "~/.emacs.d/elisp/")
