@@ -104,23 +104,48 @@
        	(require 'font-lock)))
 ;;;;;}}}
 
-;;;;;Scheme関連
-(setq scheme-program-name "gosh")
-(require 'cmuscheme)
+;;;;;Coq(Proof General)
+(load-file "~/.emacs.d/elisp/ProofGeneral/generic/proof-site.el")
+;(setenv "PATH" (concat "/usr/local/bin/" (getenv "PATH")))
+(push "/usr/local/bin/" exec-path)
 
-;; ウィンドウを２つに分けて、
-;; 一方でgoshインタプリタを実行するコマンドを定義します。
-(defun scheme-other-window ()
-  "Run scheme on other window"
-  (interactive)
-  (switch-to-buffer-other-window
-	(get-buffer-create "*scheme*"))
-  (run-scheme scheme-program-name))
-;; そのコマンドをCtrl-cSで呼び出します。
-(define-key global-map
-			"\C-cs" 'scheme-other-window)
+;;;;;;Haskell
+(push "~/.emacs.d/elisp/haskell-mode" load-path)
+(require 'haskell-mode)
+(require 'haskell-cabal)
+(setq auto-mode-alist (cons `("\\.hs$" . haskell-mode) auto-mode-alist))
+(setq auto-mode-alist (cons `("\\.lhs$" . literate-haskell-mode) auto-mode-alist))
+(setq auto-mode-alist (cons `("\\.cabal$" . haskell-cabal-mode) auto-mode-alist))
 
-;; 直前/直後の括弧に対応する括弧を光らせます。
+(setq interpreter-mode-alist (cons `("runghc" . haskell-mode) interpreter-mode-alist))
+(setq interpreter-mode-alist (cons `("runhaskell" . haskell-mode) interpreter-mode-alist))
+
+(require 'inf-haskell)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(background-color "#1c1c1c")
+ '(background-mode dark)
+ '(cursor-color "#808080")
+ '(custom-safe-themes (quote ("fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
+ '(foreground-color "#808080")
+ '(haskell-mode-hook (quote (turn-on-haskell-indent turn-on-haskell-indentation)))
+ '(haskell-program-name "ghci"))
+; indentation
+
+; ghc-mod
+
+
+
+;;;;;;Egison
+; egison-mode
+(autoload 'egison-mode "egison-mode" "Major mode for editing Egison code." t)
+(setq auto-mode-alist
+	  (cons `("\\.egi$" . egison-mode) auto-mode-alist))
+
+;; 直前/直後の括弧に対応する括弧を光らせる
 (show-paren-mode 1)
 ;色が付く部分
 ;(setq show-paren-style 'parenthesis) ; かっこに色が付く
@@ -128,69 +153,14 @@
 (setq show-paren-style 'mixed)       ; その両方
 
 ;; 括弧の補完
-(global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
-(setq skeleton-pair 1)
+;(global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
+;(global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
+;(global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
+;(setq skeleton-pair 1)
 
-;; 以下はインデントの定義です。
-(put 'and-let* 'scheme-indent-function 1)
-(put 'begin0 'scheme-indent-function 0)
-(put 'call-with-client-socket 'scheme-indent-function 1)
-(put 'call-with-input-conversion 'scheme-indent-function 1)
-(put 'call-with-input-file 'scheme-indent-function 1)
-(put 'call-with-input-process 'scheme-indent-function 1)
-(put 'call-with-input-string 'scheme-indent-function 1)
-(put 'call-with-iterator 'scheme-indent-function 1)
-(put 'call-with-output-conversion 'scheme-indent-function 1)
-(put 'call-with-output-file 'scheme-indent-function 1)
-(put 'call-with-output-string 'scheme-indent-function 0)
-(put 'call-with-temporary-file 'scheme-indent-function 1)
-(put 'call-with-values 'scheme-indent-function 1)
-(put 'dolist 'scheme-indent-function 1)
-(put 'dotimes 'scheme-indent-function 1)
-(put 'if-match 'scheme-indent-function 2)
-(put 'let*-values 'scheme-indent-function 1)
-(put 'let-args 'scheme-indent-function 2)
-(put 'let-keywords* 'scheme-indent-function 2)
-(put 'let-match 'scheme-indent-function 2)
-(put 'let-optionals* 'scheme-indent-function 2)
-(put 'let-syntax 'scheme-indent-function 1)
-(put 'let-values 'scheme-indent-function 1)
-(put 'let/cc 'scheme-indent-function 1)
-(put 'let1 'scheme-indent-function 2)
-(put 'letrec-syntax 'scheme-indent-function 1)
-(put 'make 'scheme-indent-function 1)
-(put 'multiple-value-bind 'scheme-indent-function 2)
-(put 'match 'scheme-indent-function 1)
-(put 'parameterize 'scheme-indent-function 1)
-(put 'parse-options 'scheme-indent-function 1)
-(put 'receive 'scheme-indent-function 2)
-(put 'rxmatch-case 'scheme-indent-function 1)
-(put 'rxmatch-cond 'scheme-indent-function 0)
-(put 'rxmatch-if  'scheme-indent-function 2)
-(put 'rxmatch-let 'scheme-indent-function 2)
-(put 'syntax-rules 'scheme-indent-function 1)
-(put 'unless 'scheme-indent-function 1)
-(put 'until 'scheme-indent-function 1)
-(put 'when 'scheme-indent-function 1)
-(put 'while 'scheme-indent-function 1)
-(put 'with-builder 'scheme-indent-function 1)
-(put 'with-error-handler 'scheme-indent-function 0)
-(put 'with-error-to-port 'scheme-indent-function 1)
-(put 'with-input-conversion 'scheme-indent-function 1)
-(put 'with-input-from-port 'scheme-indent-function 1)
-(put 'with-input-from-process 'scheme-indent-function 1)
-(put 'with-input-from-string 'scheme-indent-function 1)
-(put 'with-iterator 'scheme-indent-function 1)
-(put 'with-module 'scheme-indent-function 1)
-(put 'with-output-conversion 'scheme-indent-function 1)
-(put 'with-output-to-port 'scheme-indent-function 1)
-(put 'with-output-to-process 'scheme-indent-function 1)
-(put 'with-output-to-string 'scheme-indent-function 1)
-(put 'with-port-locking 'scheme-indent-function 1)
-(put 'with-string-io 'scheme-indent-function 1)
-(put 'with-time-counter 'scheme-indent-function 1)
-(put 'with-signal-handlers 'scheme-indent-function 1)
-(put 'with-locking-mutex 'scheme-indent-function 1)
-(put 'guard 'scheme-indent-function 1)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
