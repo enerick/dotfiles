@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# lastupdate 2009/10/25
 
 #
 # Includes
@@ -39,6 +38,8 @@ case ${UID} in
     SPROMPT="%r is correct? [n,y,a,e]"
     ;;
 esac
+
+source ~/.zsh/prompt
 
 # auto change directory
 #
