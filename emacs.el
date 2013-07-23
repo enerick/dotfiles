@@ -1,16 +1,40 @@
 ;;;;;Code
 (setq user-full-name "enerick")
 
-(setq load-path (cons "~/.emacs.d/elisp" (cons "~/.emacs.d/auto-install" load-path)))
-
-;;;;;Settings
+;;;;;;Settings
 (set-language-environment 'Japanese)
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8-unix)
 
+;;;;Load path
+(setq load-path (cons "~/.emacs.d/elisp" (cons "~/.emacs.d/auto-install" load-path)))
+(setq custom-theme-load-path (cons "~/.emacs.d/theme/" (cons "~/.emacs.d/theme/emacs-color-theme-solarized" custom-theme-load-path)))
+
+;;;;;Color
+(if (eq window-system 'ns)
+    (load-theme 'solarized-light t)
+  (load-theme 'solarized-dark t))
+
+;;;;;Font
+(cond
+ ((or (eq window-system 'ns) (eq window-system 'mac))
+  (when (>= emacs-major-version 23)
+    (set-fontset-font
+     (frame-parameter nil 'font)
+     'japanese-jisx0208
+     '("Hiragino Kaku Gothic Pro" . "iso10646-1"))
+    (set-fontset-font
+     (frame-parameter nil 'font)
+     'japanese-jisx0212
+     '("Hiragino Kaku Gothic Pro" . "iso10646-1"))
+    (set-fontset-font
+     (frame-parameter nil 'font)
+     'mule-unicode-0100-24ff
+     '("monaco" . "iso10646-1"))
+     )))
+
 ; 行番号の表示
-(push "~/.emacs.d/elisp" load-path)
 (require 'linum)
 (global-linum-mode t)
 (setq linum-format "%d ")
@@ -71,7 +95,7 @@
 
 (setq auto-mode-alist (cons '("\\.ml\\w?" . tuareg-mode) auto-mode-alist))
 (autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
-(autoload 'camldebug "camldebug" "Run the Caml debugger" t)
+(autoload 'camldebug "ocamldebug" "Run the Caml debugger" t)
 
 (if (and (boundp 'window-system) window-system)
     (when (string-match "XEmacs" emacs-version)
