@@ -1,13 +1,13 @@
 ;;;;;Code
 (setq user-full-name "enerick")
 
-;;;;;;Settings
+;;;;;Settings
 (set-language-environment 'Japanese)
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8-unix)
 
-;;;;Load path
+;;;;;Load path
 (setq load-path (cons "~/.emacs.d/elisp" (cons "~/.emacs.d/auto-install" load-path)))
 (setq custom-theme-load-path (cons "~/.emacs.d/theme/" (cons "~/.emacs.d/theme/emacs-color-theme-solarized" custom-theme-load-path)))
 
@@ -42,18 +42,18 @@
 ; スタートアップメッセージを非表示
 (setq inhibit-startup-screen t)
 
-;;;;;バックアップファイルつくらない
+; バックアップファイルつくらない
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 
-;optionをメタキーに
+; optionをメタキーに
 (setq mac-esc-key-is-meta nil) ; コマンドキーをメタにしない
-(setq mac-option-modifier 'meta)   ; オプションキーをメタに
+(setq mac-option-modifier 'meta) ; オプションキーをメタに
 (setq mac-command-modifier 'super) ; コマンドキーを Super に
 (setq mac-pass-control-to-system t) ; コントロールキーを Mac ではなく Emacs に渡す
 (setq mac-pass-option-to-system t)
 
-;カーソルキーをhjklに
+; カーソルキーをhjklに
 (global-set-key "\C-h" 'backward-char)
 (global-set-key "\C-j" 'next-line)
 (global-set-key "\C-k" 'previous-line)
@@ -61,7 +61,7 @@
 
 (global-set-key "\C-d" 'kill-line)
 
-;文字サイズの拡大縮小
+; 文字サイズの拡大縮小
 (global-set-key (kbd "s-+") (kbd "C-x C-+"))
 (global-set-key (kbd "s-_") (kbd "C-x C--"))
 
@@ -94,9 +94,7 @@
 			 (local-set-key "\C-c\C-y" 'ocamlspot-type-and-copy)
 			 (local-set-key "\C-c\C-u" 'ocamlspot-use)
 			 (local-set-key "\C-ct" 'caml-types-show-type)))
-;;;;;tuareg-mode
-;;; append-tuareg.el - Tuareg quick installation: Append this file to .emacs.
-
+; tuareg-mode
 (setq auto-mode-alist (cons '("\\.ml\\w?" . tuareg-mode) auto-mode-alist))
 (autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
 (autoload 'camldebug "ocamldebug" "Run the Caml debugger" t)
@@ -113,7 +111,7 @@
 ;(setenv "PATH" (concat "/usr/local/bin/" (getenv "PATH")))
 (push "/usr/local/bin/" exec-path)
 
-;;;;;;Haskell
+;;;;;Haskell
 (push "~/.emacs.d/elisp/haskell-mode" load-path)
 (require 'haskell-mode)
 (require 'haskell-cabal)
