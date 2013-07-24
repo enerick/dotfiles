@@ -61,6 +61,10 @@
 
 (global-set-key "\C-d" 'kill-line)
 
+;文字サイズの拡大縮小
+(global-set-key (kbd "s-+") (kbd "C-x C-+"))
+(global-set-key (kbd "s-_") (kbd "C-x C--"))
+
 ;;;;;install-elisp
 (require 'install-elisp)
 (setq install-elisp-repository-directory "~/.emacs.d/elisp/")
