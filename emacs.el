@@ -39,6 +39,9 @@
 (global-linum-mode t)
 (setq linum-format "%d ")
 
+; 列番号の表示
+(column-number-mode t)
+
 ; スタートアップメッセージを非表示
 (setq inhibit-startup-screen t)
 
@@ -78,19 +81,23 @@
 
 ;;;;;Anything
 (require 'anything-startup)
-(define-key global-map [(super a)] 'anything)
+(define-key global-map [(super a)] 'anything-exit-minibuffer)
+
+(global-set-key (kbd "s-f") 'anything-for-files)
+(global-set-key (kbd "s-b") 'anything-for-buffers)
 
 ;;;;;YaTeX
 (push "~/.emacs.d/elisp/yatex" load-path)
 (setq auto-mode-alist (cons (cons "\\.tex$" 'yatex-mode) auto-mode-alist))
 (autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
+(setq YaTeX-kanji-code 4)
 
 ;;;;;OCaml{{{
 ; tuareg mode hook (use caml-mode-hook instead if you use caml-mode)
 (add-hook 'tuareg-mode-hook 
 		  '(lambda ()
 			 (local-set-key "\C-c;" 'ocamlspot-query)
-			 (local-set-key "\C-c\C-t" 'ocamlspot-type)
+			 (local-set-key "\C-c\C-t" 'caml-types-show-type)
 			 (local-set-key "\C-c\C-y" 'ocamlspot-type-and-copy)
 			 (local-set-key "\C-c\C-u" 'ocamlspot-use)
 			 (local-set-key "\C-ct" 'caml-types-show-type)))
@@ -104,6 +111,9 @@
        	(if (not (and (boundp 'mule-x-win-initted) mule-x-win-initted))
             (require 'sym-lock))
        	(require 'font-lock)))
+
+(setq tuareg-library-path "~/.opam/4.00.1/lib")
+(push "~/.opam/4.00.1/bin" exec-path)
 ;;;;;}}}
 
 ;;;;;Coq(Proof General)
