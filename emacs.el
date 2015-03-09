@@ -12,7 +12,7 @@
 (setq custom-theme-load-path (cons "~/.emacs.d/theme/" (cons "~/.emacs.d/theme/emacs-color-theme-solarized" custom-theme-load-path)))
 
 ;;;;;Color
-(if (eq window-system 'ns)
+(if (or (eq window-system 'ns) (eq window-system 'mac))
     (load-theme 'solarized-light t)
   (load-theme 'solarized-dark t))
 
@@ -37,7 +37,9 @@
 ; 行番号の表示
 (require 'linum)
 (global-linum-mode t)
-(setq linum-format "%d ")
+(setq linum-format "%d")
+(setq linum-delay t)
+(set-face-attribute 'linum nil :height 100)
 
 ; 列番号の表示
 (column-number-mode t)
@@ -62,11 +64,43 @@
 (global-set-key "\C-k" 'previous-line)
 (global-set-key "\C-l" 'forward-char)
 
-(global-set-key "\C-d" 'kill-line)
-
 ; 文字サイズの拡大縮小
 (global-set-key (kbd "s-+") (kbd "C-x C-+"))
 (global-set-key (kbd "s-_") (kbd "C-x C--"))
+
+; バッファを再読み込み
+(global-set-key (kbd "s-r") (kbd "C-x C-v RET"))
+
+;; copy & paste
+(global-set-key (kbd "s-c") 'copy-region-as-kill)
+(global-set-key (kbd "s-v") 'yank)
+;; Save buffer by Command-s
+(global-set-key (kbd "s-s") (kbd "C-x C-s"))
+;; Quit by Command-q
+(global-set-key (kbd "s-q") (kbd "C-x C-c"))
+;; Create/Close a flame (window)
+(global-set-key (kbd "s-n") 'make-frame-command)
+(global-set-key (kbd "s-w") 'delete-frame)
+;; Undo
+(global-set-key (kbd "s-z") 'undo)
+;; Kill buffer
+(global-set-key (kbd "s-k") 'kill-buffer)
+;; Goto line
+(global-set-key (kbd "s-l") 'goto-line)
+;; Eval expr
+(global-set-key (kbd "s-e") 'eval-expression)
+
+(defun smart-beginning-of-line ()
+  "Move to beginning of line, or line text"
+  (interactive)
+  (let ((pt (point)))
+    (beginning-of-line-text)
+    (when (eq pt (point))
+      (beginning-of-line))))
+(global-set-key (kbd "C-a") 'smart-beginning-of-line)
+
+;; Hide tool bar
+(tool-bar-mode 0)
 
 ;;;;;install-elisp
 (require 'install-elisp)
